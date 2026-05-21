@@ -1,0 +1,644 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>餐饮开店核算工具 - 快速算清每日目标营业额</title>
+    <meta name="description" content="餐饮开店核算工具，只需输入月租金、人员成本、毛利率等数据，一键算出每日目标营业额，轻松搞定开店盈亏与回本计划。">
+    <meta name="keywords" content="餐饮开店,开店核算,盈亏平衡,回本计算,餐饮创业,每日营业额">
+
+    <!-- Open Graph / 微信/QQ 分享 -->
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="餐饮开店核算工具 - 快速算清每日目标营业额">
+    <meta property="og:description" content="只需填写5项数据，一键算清每日盈亏平衡和目标营业额，搞定开店回本计划。">
+    <meta property="og:image" content="https://cdn.jsdelivr.net/gh/twitter/twemoji@latest/assets/svg/1f372.svg">
+    <meta property="og:url" content="https://kaidian.jiandaoyun.com">
+    <meta property="og:site_name" content="餐饮开店核算工具">
+    <meta property="og:locale" content="zh_CN">
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="餐饮开店核算工具">
+    <meta name="twitter:description" content="快速算清每日目标营业额，搞定开店盈亏与回本计划">
+
+    <!-- 微信分享 -->
+    <meta itemprop="name" content="餐饮开店核算工具">
+    <meta itemprop="description" content="只需填写5项数据，一键算清每日盈亏平衡和目标营业额。">
+    <meta itemprop="image" content="https://cdn.jsdelivr.net/gh/twitter/twemoji@latest/assets/svg/1f372.svg">
+
+    <style>
+        :root {
+            --primary: #e8783b;
+            --primary-dark: #c95a1e;
+            --primary-light: #fff3eb;
+            --bg: #f7f5f2;
+            --card-bg: #ffffff;
+            --text: #2c2416;
+            --text-secondary: #6b5e4a;
+            --border: #e8e0d5;
+            --success: #3b8c5a;
+            --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.04);
+            --shadow-md: 0 4px 20px rgba(0, 0, 0, 0.06);
+            --shadow-lg: 0 12px 40px rgba(0, 0, 0, 0.08);
+            --radius: 14px;
+            --radius-sm: 10px;
+            --transition: 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Helvetica Neue", sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+            line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            background-image:
+                radial-gradient(ellipse at 50% 0%, rgba(232, 120, 59, 0.06) 0%, transparent 60%),
+                radial-gradient(ellipse at 80% 100%, rgba(232, 120, 59, 0.04) 0%, transparent 50%);
+        }
+
+        .container {
+            max-width: 480px;
+            margin: 0 auto;
+            padding: 20px 16px 40px;
+        }
+
+        /* Header */
+        .header {
+            text-align: center;
+            padding: 28px 0 8px;
+        }
+
+        .logo {
+            width: 56px;
+            height: 56px;
+            background: linear-gradient(135deg, #f59e4b, #e8783b);
+            border-radius: 18px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 30px;
+            box-shadow: 0 6px 20px rgba(232, 120, 59, 0.3);
+            margin-bottom: 14px;
+        }
+
+        .header h1 {
+            font-size: 22px;
+            font-weight: 700;
+            color: var(--text);
+            letter-spacing: -0.3px;
+            margin-bottom: 6px;
+        }
+
+        .header .subtitle {
+            font-size: 13px;
+            color: var(--text-secondary);
+            font-weight: 400;
+            letter-spacing: 0.5px;
+        }
+
+        /* Cards */
+        .card {
+            background: var(--card-bg);
+            border-radius: var(--radius);
+            padding: 20px;
+            margin-bottom: 16px;
+            box-shadow: var(--shadow-sm);
+            border: 1px solid var(--border);
+            transition: box-shadow var(--transition), border-color var(--transition);
+        }
+
+        .card:hover {
+            box-shadow: var(--shadow-md);
+        }
+
+        .card-title {
+            font-size: 15px;
+            font-weight: 600;
+            color: var(--text);
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .card-title .icon {
+            width: 28px;
+            height: 28px;
+            border-radius: 9px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            flex-shrink: 0;
+        }
+
+        .icon-input {
+            background: #fff3eb;
+            color: #e8783b;
+        }
+
+        .icon-result {
+            background: #eaf7ef;
+            color: #3b8c5a;
+        }
+
+        /* Form */
+        .form-group {
+            margin-bottom: 14px;
+        }
+
+        .form-group:last-child {
+            margin-bottom: 0;
+        }
+
+        .form-label {
+            display: block;
+            font-size: 13px;
+            font-weight: 500;
+            color: var(--text-secondary);
+            margin-bottom: 6px;
+        }
+
+        .form-label .hint {
+            font-weight: 400;
+            font-size: 11px;
+            color: #a89880;
+            margin-left: 4px;
+        }
+
+        .input-wrapper {
+            position: relative;
+            display: flex;
+            align-items: center;
+            background: #faf8f5;
+            border: 1.5px solid var(--border);
+            border-radius: var(--radius-sm);
+            transition: all var(--transition);
+        }
+
+        .input-wrapper:focus-within {
+            border-color: var(--primary);
+            background: #fff;
+            box-shadow: 0 0 0 3px rgba(232, 120, 59, 0.08);
+        }
+
+        .input-wrapper .prefix {
+            padding: 0 0 0 14px;
+            font-size: 15px;
+            color: var(--text-secondary);
+            font-weight: 500;
+            flex-shrink: 0;
+        }
+
+        .input-wrapper .suffix {
+            padding: 0 14px 0 0;
+            font-size: 13px;
+            color: var(--text-secondary);
+            flex-shrink: 0;
+        }
+
+        .input-wrapper input {
+            flex: 1;
+            border: none;
+            background: transparent;
+            padding: 13px 4px;
+            font-size: 16px;
+            color: var(--text);
+            font-family: inherit;
+            outline: none;
+            min-width: 0;
+            font-variant-numeric: tabular-nums;
+        }
+
+        .input-wrapper input::placeholder {
+            color: #c4b9a8;
+        }
+
+        /* 毛利率特殊样式 - 百分比输入 */
+        .gross-rate-input .suffix {
+            padding-right: 14px;
+        }
+
+        /* Button */
+        .btn-calculate {
+            width: 100%;
+            padding: 15px;
+            font-size: 17px;
+            font-weight: 600;
+            color: #fff;
+            background: linear-gradient(135deg, #f59e4b, #e8783b);
+            border: none;
+            border-radius: var(--radius-sm);
+            cursor: pointer;
+            letter-spacing: 1px;
+            transition: all var(--transition);
+            box-shadow: 0 4px 16px rgba(232, 120, 59, 0.25);
+            font-family: inherit;
+            margin-top: 4px;
+        }
+
+        .btn-calculate:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 8px 24px rgba(232, 120, 59, 0.35);
+        }
+
+        .btn-calculate:active {
+            transform: translateY(0);
+            box-shadow: 0 2px 8px rgba(232, 120, 59, 0.2);
+            transition: all 0.1s;
+        }
+
+        /* Results */
+        .results {
+            display: none;
+            animation: fadeSlideIn 0.4s ease;
+        }
+
+        .results.show {
+            display: block;
+        }
+
+        @keyframes fadeSlideIn {
+            from {
+                opacity: 0;
+                transform: translateY(12px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .result-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 14px 0;
+            border-bottom: 1px solid #f0ebe0;
+        }
+
+        .result-item:last-child {
+            border-bottom: none;
+            padding-bottom: 4px;
+        }
+
+        .result-item:first-child {
+            padding-top: 4px;
+        }
+
+        .result-label {
+            font-size: 14px;
+            color: var(--text-secondary);
+            font-weight: 400;
+        }
+
+        .result-value {
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--text);
+            font-variant-numeric: tabular-nums;
+        }
+
+        .result-highlight {
+            margin-top: 8px;
+            padding: 14px 16px;
+            background: linear-gradient(135deg, #fff7ed, #fff3eb);
+            border-radius: var(--radius-sm);
+            text-align: center;
+            border: 1px solid #fdd9b5;
+        }
+
+        .result-highlight .label {
+            font-size: 12px;
+            color: var(--primary);
+            font-weight: 500;
+            margin-bottom: 4px;
+            letter-spacing: 1px;
+        }
+
+        .result-highlight .value {
+            font-size: 32px;
+            font-weight: 800;
+            color: #c95a1e;
+            letter-spacing: -1px;
+        }
+
+        .result-highlight .unit {
+            font-size: 15px;
+            font-weight: 500;
+            color: #c95a1e;
+        }
+
+        /* Empty state placeholder */
+        .placeholder-results {
+            text-align: center;
+            padding: 20px 0;
+            color: #c4b9a8;
+            font-size: 14px;
+        }
+
+        .placeholder-results .ph-icon {
+            font-size: 36px;
+            display: block;
+            margin-bottom: 10px;
+            opacity: 0.5;
+        }
+
+        /* Footer */
+        .footer {
+            text-align: center;
+            padding: 24px 0 8px;
+            font-size: 12px;
+            color: #bfb4a4;
+        }
+
+        .footer a {
+            color: #bfb4a4;
+            text-decoration: none;
+        }
+
+        /* Toast */
+        .toast {
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%) translateY(-120px);
+            background: #2c2416;
+            color: #fff;
+            padding: 12px 24px;
+            border-radius: 24px;
+            font-size: 14px;
+            font-weight: 500;
+            z-index: 1000;
+            transition: transform 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            pointer-events: none;
+            white-space: nowrap;
+        }
+
+        .toast.show {
+            transform: translateX(-50%) translateY(0);
+        }
+
+        /* 输入错误提示 */
+        .input-wrapper.error {
+            border-color: #e05555;
+            background: #fefafa;
+        }
+
+        .error-msg {
+            font-size: 11px;
+            color: #e05555;
+            margin-top: 3px;
+            display: none;
+        }
+
+        .input-wrapper.error+.error-msg {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <header class="header">
+            <div class="logo">🍽️</div>
+            <h1>餐饮开店核算工具</h1>
+            <p class="subtitle">算清每日营业额目标 · 搞定回本计划</p>
+        </header>
+
+        <!-- 输入区域 -->
+        <div class="card" id="inputCard">
+            <div class="card-title">
+                <span class="icon icon-input">📋</span>填写基础数据
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">月租金 <span class="hint">（元/月）</span></label>
+                <div class="input-wrapper" id="wrapper-rent">
+                    <span class="prefix">¥</span>
+                    <input type="number" id="monthlyRent" placeholder="例如 15000" min="0" step="0.01" inputmode="decimal">
+                </div>
+                <div class="error-msg">请输入有效的月租金</div>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">月人员成本 <span class="hint">（元/月）</span></label>
+                <div class="input-wrapper" id="wrapper-labor">
+                    <span class="prefix">¥</span>
+                    <input type="number" id="monthlyLabor" placeholder="例如 20000" min="0" step="0.01" inputmode="decimal">
+                </div>
+                <div class="error-msg">请输入有效的月人员成本</div>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">毛利率 <span class="hint">（如60%输入60）</span></label>
+                <div class="input-wrapper gross-rate-input" id="wrapper-gross">
+                    <input type="number" id="grossMargin" placeholder="例如 60" min="0" max="100" step="0.1" inputmode="decimal">
+                    <span class="suffix">%</span>
+                </div>
+                <div class="error-msg">请输入有效的毛利率（0-100）</div>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">前期总投入 <span class="hint">（元）</span></label>
+                <div class="input-wrapper" id="wrapper-invest">
+                    <span class="prefix">¥</span>
+                    <input type="number" id="totalInvestment" placeholder="例如 200000" min="0" step="0.01" inputmode="decimal">
+                </div>
+                <div class="error-msg">请输入有效的前期总投入</div>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">期望回本周期 <span class="hint">（天）</span></label>
+                <div class="input-wrapper" id="wrapper-days">
+                    <input type="number" id="paybackDays" placeholder="例如 365" min="1" step="1" inputmode="numeric">
+                    <span class="suffix">天</span>
+                </div>
+                <div class="error-msg">请输入有效的回本周期（至少1天）</div>
+            </div>
+
+            <button class="btn-calculate" id="btnCalculate" onclick="calculate()">
+                立即核算
+            </button>
+        </div>
+
+        <!-- 结果区域 -->
+        <div class="card results" id="resultsCard">
+            <div class="card-title">
+                <span class="icon icon-result">📊</span>核算结果
+            </div>
+
+            <div class="result-item">
+                <span class="result-label">每日固定成本</span>
+                <span class="result-value" id="rDailyCost">--</span>
+            </div>
+            <div class="result-item">
+                <span class="result-label">每日盈亏平衡营业额</span>
+                <span class="result-value" id="rBreakEven">--</span>
+            </div>
+            <div class="result-item">
+                <span class="result-label">每日需分担前期投入</span>
+                <span class="result-value" id="rDailyShare">--</span>
+            </div>
+
+            <div class="result-highlight">
+                <div class="label">🎯 每日目标营业额</div>
+                <div><span class="value" id="rTarget">--</span><span class="unit"> 元</span></div>
+            </div>
+        </div>
+
+        <!-- 占位提示（未计算时） -->
+        <div class="card" id="placeholderCard">
+            <div class="placeholder-results">
+                <span class="ph-icon">📈</span>
+                填写数据后点击"立即核算"查看结果
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <p>数据仅在前端计算，不会上传服务器</p>
+        </footer>
+    </div>
+
+    <!-- Toast -->
+    <div class="toast" id="toast"></div>
+
+    <script>
+        // 格式化金额
+        function formatMoney(num) {
+            return '¥' + num.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+        }
+
+        // Toast 提示
+        function showToast(msg, duration) {
+            duration = duration || 2000;
+            var toast = document.getElementById('toast');
+            toast.textContent = msg;
+            toast.classList.add('show');
+            clearTimeout(toast._timeout);
+            toast._timeout = setTimeout(function() {
+                toast.classList.remove('show');
+            }, duration);
+        }
+
+        // 清除所有输入框错误状态
+        function clearErrors() {
+            var wrappers = document.querySelectorAll('.input-wrapper');
+            wrappers.forEach(function(w) { w.classList.remove('error'); });
+        }
+
+        // 标记某个输入框为错误
+        function setError(id, wrapperId) {
+            document.getElementById(wrapperId).classList.add('error');
+            document.getElementById(id).focus();
+        }
+
+        // 获取并验证输入值
+        function getFloat(id, label, wrapperId, allowZero) {
+            var input = document.getElementById(id);
+            var raw = input.value.trim();
+            if (raw === '') {
+                showToast('请输入' + label);
+                setError(id, wrapperId);
+                return null;
+            }
+            var val = parseFloat(raw);
+            if (isNaN(val)) {
+                showToast(label + '格式不正确');
+                setError(id, wrapperId);
+                return null;
+            }
+            if (!allowZero && val < 0) {
+                showToast(label + '不能为负数');
+                setError(id, wrapperId);
+                return null;
+            }
+            if (allowZero && val <= 0) {
+                showToast(label + '必须大于0');
+                setError(id, wrapperId);
+                return null;
+            }
+            return val;
+        }
+
+        function calculate() {
+            clearErrors();
+
+            // 获取输入
+            var monthlyRent = getFloat('monthlyRent', '月租金', 'wrapper-rent', false);
+            if (monthlyRent === null) return;
+
+            var monthlyLabor = getFloat('monthlyLabor', '月人员成本', 'wrapper-labor', false);
+            if (monthlyLabor === null) return;
+
+            var grossMargin = getFloat('grossMargin', '毛利率', 'wrapper-gross', true);
+            if (grossMargin === null) return;
+            if (grossMargin > 100) {
+                showToast('毛利率不能超过100%');
+                setError('grossMargin', 'wrapper-gross');
+                return;
+            }
+            // 将百分比转为小数
+            var grossRate = grossMargin / 100;
+
+            var totalInvestment = getFloat('totalInvestment', '前期总投入', 'wrapper-invest', false);
+            if (totalInvestment === null) return;
+
+            var paybackDays = getFloat('paybackDays', '期望回本周期', 'wrapper-days', true);
+            if (paybackDays === null) return;
+            if (paybackDays < 1) {
+                showToast('回本周期至少1天');
+                setError('paybackDays', 'wrapper-days');
+                return;
+            }
+
+            // 计算
+            var dailyFixedCost = (monthlyRent + monthlyLabor) / 30;
+            var dailyBreakEven = dailyFixedCost / grossRate;
+            var dailyShare = totalInvestment / paybackDays;
+            var dailyTarget = dailyBreakEven + dailyShare;
+
+            // 显示结果
+            document.getElementById('rDailyCost').textContent = formatMoney(dailyFixedCost);
+            document.getElementById('rBreakEven').textContent = formatMoney(dailyBreakEven);
+            document.getElementById('rDailyShare').textContent = formatMoney(dailyShare);
+            document.getElementById('rTarget').textContent = dailyTarget.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+
+            // 切换显示
+            document.getElementById('placeholderCard').style.display = 'none';
+            var resultsCard = document.getElementById('resultsCard');
+            resultsCard.classList.remove('show');
+            void resultsCard.offsetWidth;
+            resultsCard.classList.add('show');
+
+            // 滚动到结果
+            resultsCard.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+
+        // 输入框实时清除错误状态
+        document.querySelectorAll('input').forEach(function(input) {
+            input.addEventListener('input', function() {
+                var wrapper = this.closest('.input-wrapper');
+                if (wrapper) wrapper.classList.remove('error');
+            });
+        });
+
+        // 键盘回车触发计算
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Enter' && document.activeElement && document.activeElement.tagName === 'INPUT') {
+                e.preventDefault();
+                calculate();
+            }
+        });
+    </script>
+</body>
+</html>
