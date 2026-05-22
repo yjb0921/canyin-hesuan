@@ -406,9 +406,161 @@
         .input-wrapper.error+.error-msg {
             display: block;
         }
+
+        /* ========== 密码验证 ========== */
+        #pw-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(6px);
+            -webkit-backdrop-filter: blur(6px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 999;
+            animation: pwFadeIn 0.3s ease;
+        }
+        @keyframes pwFadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+        .pw-card {
+            background: #fff;
+            border-radius: 20px;
+            padding: 36px 28px 28px;
+            width: 340px;
+            max-width: 90vw;
+            text-align: center;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.2);
+            animation: pwSlideUp 0.35s ease;
+        }
+        @keyframes pwSlideUp { from { opacity: 0; transform: translateY(24px); } to { opacity: 1; transform: translateY(0); } }
+
+        .pw-card .pw-icon {
+            width: 60px; height: 60px;
+            background: linear-gradient(135deg, #f59e4b, #e8783b);
+            border-radius: 50%;
+            display: inline-flex;
+            align-items: center; justify-content: center;
+            font-size: 28px; margin-bottom: 16px;
+            box-shadow: 0 6px 20px rgba(232,120,59,0.3);
+        }
+        .pw-card h3 { font-size: 18px; font-weight: 700; color: #2c2416; margin-bottom: 6px; }
+        .pw-card .pw-desc { font-size: 13px; color: #8b7a62; margin-bottom: 20px; }
+
+        .pw-input-group {
+            display: flex; gap: 10px; margin-bottom: 10px;
+        }
+        .pw-input-group input {
+            flex: 1; padding: 12px 14px; font-size: 16px;
+            border: 1.5px solid #e0d6c4; border-radius: 10px;
+            outline: none; font-family: inherit; letter-spacing: 3px;
+            transition: border-color 0.2s;
+        }
+        .pw-input-group input:focus { border-color: #e8783b; }
+        .pw-input-group button {
+            padding: 12px 20px; font-size: 15px; font-weight: 600;
+            color: #fff; background: #e8783b; border: none;
+            border-radius: 10px; cursor: pointer; white-space: nowrap;
+            transition: all 0.2s; font-family: inherit;
+        }
+        .pw-input-group button:active { background: #c95a1e; transform: scale(0.97); }
+
+        .pw-error { font-size: 12px; color: #e05555; min-height: 18px; margin-bottom: 6px; }
+        .pw-footer { font-size: 11px; color: #b8aa94; margin-top: 16px; line-height: 1.6; }
+
+        /* ========== 管理后台面板 ========== */
+        #admin-panel {
+            display: none; position: fixed; inset: 0;
+            background: rgba(0,0,0,0.55); backdrop-filter: blur(6px);
+            -webkit-backdrop-filter: blur(6px);
+            align-items: center; justify-content: center; z-index: 1000;
+        }
+        #admin-panel.show { display: flex; }
+
+        .admin-card {
+            background: #fff; border-radius: 20px; padding: 28px 24px;
+            width: 360px; max-width: 90vw; box-shadow: 0 20px 60px rgba(0,0,0,0.2);
+        }
+        .admin-card h3 { font-size: 17px; font-weight: 700; color: #2c2416; margin-bottom: 4px; display: flex; align-items: center; gap: 8px; }
+        .admin-card .admin-sub { font-size: 12px; color: #8b7a62; margin-bottom: 18px; }
+
+        .admin-card label { display: block; font-size: 13px; font-weight: 500; color: #6b5e4a; margin-bottom: 6px; }
+        .admin-card input {
+            width: 100%; padding: 11px 14px; font-size: 15px;
+            border: 1.5px solid #e0d6c4; border-radius: 10px; outline: none;
+            font-family: inherit; margin-bottom: 12px;
+        }
+        .admin-card input:focus { border-color: #e8783b; }
+
+        .admin-card .hash-box {
+            background: #f7f5f2; border: 1px solid #e0d6c4;
+            border-radius: 10px; padding: 14px; font-size: 11px;
+            font-family: 'SF Mono', 'Cascadia Code', 'Consolas', monospace;
+            color: #6b5e4a; word-break: break-all; line-height: 1.8;
+            margin-bottom: 14px; display: none;
+        }
+        .admin-card .hash-box.show { display: block; }
+
+        .admin-card .btn-row { display: flex; gap: 10px; }
+        .admin-card .btn-row button {
+            flex: 1; padding: 11px; font-size: 14px; font-weight: 600;
+            border: none; border-radius: 10px; cursor: pointer;
+            font-family: inherit; transition: all 0.15s;
+        }
+        .btn-primary { background: #e8783b; color: #fff; }
+        .btn-secondary { background: #f0ebe0; color: #6b5e4a; }
+        .btn-primary:active { background: #c95a1e; transform: scale(0.97); }
+        .btn-secondary:active { background: #e0d6c4; transform: scale(0.97); }
+
+        .admin-msg { font-size: 12px; text-align: center; margin-top: 8px; min-height: 18px; }
+        .admin-msg.ok { color: #3b8c5a; }
+        .admin-msg.err { color: #e05555; }
+
+        #main-content { display: none; }
+        #main-content.unlocked { display: block; }
     </style>
 </head>
 <body>
+    <!-- ========== 密码验证弹窗 ========== -->
+    <div id="pw-overlay">
+        <div class="pw-card">
+            <div class="pw-icon">🔐</div>
+            <h3>餐饮开店核算工具</h3>
+            <p class="pw-desc">请输入访问密码</p>
+            <div class="pw-input-group">
+                <input type="password" id="pw-input" placeholder="请输入密码" maxlength="20" autocomplete="off">
+                <button id="pw-submit">验证</button>
+            </div>
+            <div class="pw-error" id="pw-error"></div>
+            <button class="btn-secondary" id="pw-skip" style="display:none;width:100%;padding:11px;font-size:14px;border-radius:10px;">跳过（已保存）→</button>
+        </div>
+    </div>
+
+    <!-- ========== 管理后台面板 ========== -->
+    <div id="admin-panel">
+        <div class="admin-card">
+            <h3>⚙️ 管理后台</h3>
+            <p class="admin-sub">修改访问密码</p>
+            <label>当前密码</label>
+            <input type="password" id="admin-current-pw" placeholder="输入当前密码" maxlength="20">
+            <label>新密码</label>
+            <input type="password" id="admin-new-pw" placeholder="设置新密码（6-20位）" maxlength="20">
+            <label>确认新密码</label>
+            <input type="password" id="admin-confirm-pw" placeholder="再次输入新密码" maxlength="20">
+            <div class="hash-box" id="hash-box">
+                <strong>📋 新密码哈希值（复制替换代码中的 DEFAULT_PASSWORD_HASH）：</strong><br>
+                <span id="hash-value"></span>
+            </div>
+            <div class="admin-msg" id="admin-msg"></div>
+            <div class="btn-row">
+                <button class="btn-secondary" id="admin-cancel">关闭</button>
+                <button class="btn-primary" id="admin-save">保存新密码</button>
+            </div>
+            <p class="pw-footer" style="margin-top:14px;">修改后的密码仅保存在浏览器本地。<br>要让所有用户使用新密码，需将上方哈希值更新到 GitHub 代码中。</p>
+        </div>
+    </div>
+
+    <!-- ========== 主内容 ========== -->
+    <div id="main-content">
     <div class="container">
         <!-- Header -->
         <header class="header">
@@ -514,6 +666,224 @@
 
     <!-- Toast -->
     <div class="toast" id="toast"></div>
+
+    </div>
+    </div><!-- /main-content -->
+
+    <script>
+        // ==================== 密码系统配置 ====================
+        // 🔧 修改默认密码：改下面这行哈希值即可（SHA256格式）
+        //    当前默认密码：888888
+        //    哈希值获取方法：在管理后台输入新密码后可看到哈希值
+        const DEFAULT_PASSWORD_HASH = '92925488b28ab12584ac8fcaa8a27a0f497b2c62940c8f4fbc8ef19ebc87c43e';
+        const PASSWORD_SALT = 'canyin_hesuan_2026';
+        const STORAGE_KEY = 'canyin_hesuan_pw';
+        const STORAGE_DAYS = 7;
+
+        // SHA256 哈希函数
+        async function sha256(message) {
+            const msgBuffer = new TextEncoder().encode(message);
+            const hashBuffer = await crypto.subtle.digest('SHA-256', msgBuffer);
+            const hashArray = Array.from(new Uint8Array(hashBuffer));
+            return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+        }
+
+        // 获取有效密码哈希（优先从localStorage取，其次用默认值）
+        function getStoredHash() {
+            try {
+                const stored = localStorage.getItem(STORAGE_KEY);
+                if (stored) {
+                    const data = JSON.parse(stored);
+                    const expireTime = data.time + STORAGE_DAYS * 24 * 60 * 60 * 1000;
+                    if (Date.now() < expireTime && data.hash) {
+                        return data.hash;
+                    }
+                }
+            } catch(e) {}
+            return DEFAULT_PASSWORD_HASH;
+        }
+
+        // 验证密码
+        async function verifyPassword(input) {
+            const hash = await sha256(input + PASSWORD_SALT);
+            const storedHash = getStoredHash();
+            return hash === storedHash;
+        }
+
+        // 保存密码到localStorage
+        function savePasswordToStorage(password) {
+            sha256(password + PASSWORD_SALT).then(hash => {
+                const data = { hash: hash, time: Date.now() };
+                localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+            });
+        }
+
+        // ==================== 密码页面逻辑 ====================
+        const pwOverlay = document.getElementById('pw-overlay');
+        const pwInput = document.getElementById('pw-input');
+        const pwSubmit = document.getElementById('pw-submit');
+        const pwError = document.getElementById('pw-error');
+        const pwSkip = document.getElementById('pw-skip');
+        const mainContent = document.getElementById('main-content');
+
+        // 检查是否已保存有效密码
+        async function checkSavedAccess() {
+            const stored = getStoredHash();
+            if (stored && stored !== DEFAULT_PASSWORD_HASH) {
+                // 有本地保存的密码记录，尝试跳过
+                pwSkip.style.display = 'block';
+            }
+        }
+
+        // 解锁
+        async function unlock(password) {
+            const valid = await verifyPassword(password);
+            if (valid) {
+                savePasswordToStorage(password);
+                pwOverlay.style.display = 'none';
+                mainContent.classList.add('unlocked');
+                pwInput.value = '';
+                pwError.textContent = '';
+            } else {
+                pwError.textContent = '密码错误，请重试';
+                pwInput.value = '';
+                pwInput.focus();
+            }
+        }
+
+        // 提交验证
+        pwSubmit.addEventListener('click', async function() {
+            const pw = pwInput.value.trim();
+            if (!pw) { pwError.textContent = '请输入密码'; return; }
+            pwSubmit.textContent = '验证中...';
+            pwSubmit.disabled = true;
+            await unlock(pw);
+            pwSubmit.textContent = '验证';
+            pwSubmit.disabled = false;
+        });
+
+        // 回车提交
+        pwInput.addEventListener('keydown', function(e) {
+            if (e.key === 'Enter') pwSubmit.click();
+        });
+
+        // 跳过按钮（使用已保存密码）
+        pwSkip.addEventListener('click', async function() {
+            // 用已保存哈希直接解锁
+            const stored = getStoredHash();
+            if (stored) {
+                pwOverlay.style.display = 'none';
+                mainContent.classList.add('unlocked');
+            }
+        });
+
+        // ==================== 管理后台逻辑 ====================
+        const adminPanel = document.getElementById('admin-panel');
+        const adminCurrentPw = document.getElementById('admin-current-pw');
+        const adminNewPw = document.getElementById('admin-new-pw');
+        const adminConfirmPw = document.getElementById('admin-confirm-pw');
+        const adminMsg = document.getElementById('admin-msg');
+        const adminSave = document.getElementById('admin-save');
+        const adminCancel = document.getElementById('admin-cancel');
+        const hashBox = document.getElementById('hash-box');
+        const hashValue = document.getElementById('hash-value');
+
+        let longPressTimer = null;
+
+        // 长按标题3秒进入管理后台
+        const headerTitle = document.querySelector('.header h1');
+        headerTitle.style.userSelect = 'none';
+        headerTitle.style.webkitUserSelect = 'none';
+        headerTitle.style.cursor = 'default';
+
+        function startLongPress(e) {
+            longPressTimer = setTimeout(openAdminPanel, 2500);
+        }
+        function cancelLongPress() {
+            if (longPressTimer) { clearTimeout(longPressTimer); longPressTimer = null; }
+        }
+
+        headerTitle.addEventListener('mousedown', startLongPress);
+        headerTitle.addEventListener('touchstart', startLongPress, { passive: true });
+        headerTitle.addEventListener('mouseup', cancelLongPress);
+        headerTitle.addEventListener('mouseleave', cancelLongPress);
+        headerTitle.addEventListener('touchend', cancelLongPress);
+        headerTitle.addEventListener('touchcancel', cancelLongPress);
+        headerTitle.addEventListener('touchmove', cancelLongPress);
+
+        function openAdminPanel() {
+            if (mainContent.classList.contains('unlocked')) {
+                adminPanel.classList.add('show');
+                adminCurrentPw.value = '';
+                adminNewPw.value = '';
+                adminConfirmPw.value = '';
+                adminMsg.textContent = '';
+                adminMsg.className = 'admin-msg';
+                hashBox.classList.remove('show');
+            }
+            cancelLongPress();
+        }
+
+        adminCancel.addEventListener('click', function() {
+            adminPanel.classList.remove('show');
+        });
+
+        adminPanel.addEventListener('click', function(e) {
+            if (e.target === adminPanel) adminPanel.classList.remove('show');
+        });
+
+        adminSave.addEventListener('click', async function() {
+            adminMsg.textContent = '';
+            adminMsg.className = 'admin-msg';
+
+            const currentPw = adminCurrentPw.value.trim();
+            const newPw = adminNewPw.value.trim();
+            const confirmPw = adminConfirmPw.value.trim();
+
+            if (!currentPw) { adminMsg.textContent = '请输入当前密码'; adminMsg.className = 'admin-msg err'; return; }
+            if (!newPw) { adminMsg.textContent = '请输入新密码'; adminMsg.className = 'admin-msg err'; return; }
+            if (newPw.length < 6) { adminMsg.textContent = '新密码至少6位'; adminMsg.className = 'admin-msg err'; return; }
+            if (newPw.length > 20) { adminMsg.textContent = '新密码不能超过20位'; adminMsg.className = 'admin-msg err'; return; }
+            if (newPw !== confirmPw) { adminMsg.textContent = '两次输入的新密码不一致'; adminMsg.className = 'admin-msg err'; return; }
+
+            // 验证当前密码
+            const valid = await verifyPassword(currentPw);
+            if (!valid) {
+                adminMsg.textContent = '当前密码错误';
+                adminMsg.className = 'admin-msg err';
+                return;
+            }
+
+            // 生成新密码哈希
+            const newHash = await sha256(newPw + PASSWORD_SALT);
+            savePasswordToStorage(newPw);
+
+            // 显示哈希值
+            hashValue.textContent = newHash;
+            hashBox.classList.add('show');
+            adminMsg.textContent = '✅ 密码已更新！请复制上方哈希值替换代码中的 DEFAULT_PASSWORD_HASH';
+            adminMsg.className = 'admin-msg ok';
+            adminCurrentPw.value = '';
+            adminNewPw.value = '';
+            adminConfirmPw.value = '';
+        });
+
+        // 如果哈希值被点击，复制到剪贴板
+        hashValue.addEventListener('click', function() {
+            const text = hashValue.textContent;
+            if (text && navigator.clipboard) {
+                navigator.clipboard.writeText(text).then(() => {
+                    adminMsg.textContent = '📋 哈希值已复制到剪贴板';
+                    adminMsg.className = 'admin-msg ok';
+                });
+            }
+        });
+        hashValue.style.cursor = 'pointer';
+        hashValue.title = '点击复制哈希值';
+
+        // 页面加载时检查
+        checkSavedAccess();
+    </script>
 
     <script>
         // 格式化金额
